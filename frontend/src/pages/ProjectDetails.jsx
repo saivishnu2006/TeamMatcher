@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Sparkles, Users, UserPlus, Cpu, Clock, CheckCircle, Trash2, ArrowLeft, Hourglass, Mail, Check } from 'lucide-react';
+import { Sparkles, Users, UserPlus, Cpu, Clock, CheckCircle, Trash2, ArrowLeft, Hourglass, Mail, Check, MessageSquare, Lock } from 'lucide-react';
 import TeamBuilderModal from '../components/TeamBuilderModal';
 import TeamAnalysisModal from '../components/TeamAnalysisModal';
 import JoinRequestModal from '../components/JoinRequestModal';
 import AiChatWidget from '../components/AiChatWidget';
+import TeamChatWidget from '../components/TeamChatWidget';
 import api from '../api/axios';
 
 const ProjectDetails = () => {
@@ -113,6 +114,17 @@ const ProjectDetails = () => {
 
           {/* Action buttons on top right */}
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            {(isOwner || userStatus?.isMember) && (
+              <Link
+                to={`/projects/${project.id}/chat`}
+                className="btn btn-primary btn-sm"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                title="Open Team Group Chat"
+              >
+                <MessageSquare size={15} /> Team Chat
+              </Link>
+            )}
+
             {isOwner && (
               <button onClick={handleDeleteProject} className="btn btn-outline btn-sm" style={{ color: 'var(--danger)', borderColor: '#fca5a5' }} title="Delete Project">
                 <Trash2 size={15} /> Delete
@@ -318,6 +330,70 @@ const ProjectDetails = () => {
             >
               <UserPlus size={18} /> Request to Join this Team
             </button>
+          </div>
+        )}
+      </div>
+
+      {/* Team Group Chat Section */}
+      <div style={{ marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+              <MessageSquare size={20} color="var(--primary)" /> Team Group Chat
+            </h3>
+            <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', margin: 0, marginTop: '0.15rem' }}>
+              Real-time collaboration and chat for all joined team members
+            </p>
+          </div>
+          {(isOwner || userStatus?.isMember) && (
+            <Link to={`/projects/${project.id}/chat`} className="btn btn-outline btn-sm">
+              Open Fullscreen Chat
+            </Link>
+          )}
+        </div>
+
+        {isOwner || userStatus?.isMember ? (
+          <TeamChatWidget projectId={project.id} height="480px" showHeader={false} />
+        ) : (
+          <div
+            className="card"
+            style={{
+              padding: '2.5rem 1.5rem',
+              textAlign: 'center',
+              background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+              border: '1px dashed var(--border)',
+            }}
+          >
+            <div
+              style={{
+                width: '3.5rem',
+                height: '3.5rem',
+                borderRadius: 'var(--radius-full)',
+                background: 'var(--bg-surface)',
+                color: 'var(--text-muted)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem',
+              }}
+            >
+              <Lock size={24} />
+            </div>
+            <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+              Team Group Chat is Reserved for Members
+            </h4>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', maxWidth: '460px', margin: '0 auto 1.25rem', lineHeight: 1.5 }}>
+              Only members who have joined this project team can view previous conversations or send real-time messages.
+            </p>
+            {!userStatus?.hasPendingRequest && !isFull && (
+              <button
+                onClick={() => setShowJoinModal(true)}
+                className="btn btn-primary btn-sm"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+              >
+                <UserPlus size={15} /> Request to Join Team to Unlock Chat
+              </button>
+            )}
           </div>
         )}
       </div>

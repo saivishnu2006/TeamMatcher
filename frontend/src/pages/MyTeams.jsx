@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, ArrowRight, Mail, FolderKanban } from 'lucide-react';
+import { Users, ArrowRight, Mail, FolderKanban, MessageSquare } from 'lucide-react';
 import api from '../api/axios';
 
 const MyTeams = () => {
@@ -62,9 +62,14 @@ const MyTeams = () => {
                   </p>
                 </div>
 
-                <Link to={`/projects/${t.projectId}`} className="btn btn-outline btn-sm">
-                  View Project <ArrowRight size={14} />
-                </Link>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Link to={`/teams/${t.id}/chat`} className="btn btn-primary btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <MessageSquare size={14} /> Team Chat
+                  </Link>
+                  <Link to={`/projects/${t.projectId}`} className="btn btn-outline btn-sm">
+                    View Project <ArrowRight size={14} />
+                  </Link>
+                </div>
               </div>
 
               {/* Members Roster */}

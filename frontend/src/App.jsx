@@ -16,6 +16,7 @@ import ProjectDetails from './pages/ProjectDetails';
 import FindTeammates from './pages/FindTeammates';
 import TeamRequests from './pages/TeamRequests';
 import MyTeams from './pages/MyTeams';
+import TeamChatPage from './pages/TeamChatPage';
 import AdminDashboard from './pages/AdminDashboard';
 
 const AppRoutes = () => {
@@ -98,6 +99,22 @@ const AppRoutes = () => {
             element={
               <ProtectedRoute>
                 <MyTeams />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/teams/:teamId/chat"
+            element={
+              <ProtectedRoute>
+                <TeamChatPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/projects/:projectId/chat"
+            element={
+              <ProtectedRoute>
+                <TeamChatPage />
               </ProtectedRoute>
             }
           />

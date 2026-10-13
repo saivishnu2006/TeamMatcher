@@ -69,6 +69,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/skills").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/interests").permitAll()
+                        .requestMatchers("/ws-chat/**", "/ws-chat").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
