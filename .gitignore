@@ -13,3 +13,7 @@ backend/target/
 .idea/
 
 *.log
+.vercel
+.env*
+data/
+*.mv.db
