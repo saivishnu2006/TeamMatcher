@@ -103,9 +103,22 @@ const TeamChatWidget = ({ teamId, projectId, height = '560px', showHeader = true
     if (!activeTeamId || accessDenied) return;
 
     const token = localStorage.getItem('token');
+    let wsEndpoint = '/ws-chat';
+    const apiUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL;
+    if (import.meta.env.VITE_WS_URL) {
+      wsEndpoint = import.meta.env.VITE_WS_URL.replace(/\/+$/, '') + '/ws-chat';
+    } else if (apiUrl && apiUrl.startsWith('http')) {
+      try {
+        const backendOrigin = new URL(apiUrl).origin;
+        wsEndpoint = `${backendOrigin}/ws-chat`;
+      } catch (e) {
+        // fallback to /ws-chat
+      }
+    }
+
     const socketUrl = token
-      ? `/ws-chat?token=${encodeURIComponent(token)}`
-      : '/ws-chat';
+      ? `${wsEndpoint}?token=${encodeURIComponent(token)}`
+      : wsEndpoint;
 
     const client = new Client({
       webSocketFactory: () => new SockJS(socketUrl),
